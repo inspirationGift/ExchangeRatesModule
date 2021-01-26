@@ -37,16 +37,10 @@ public class DbConnector {
         jpaVendorAdapter.setGenerateDdl(true);
         jpaVendorAdapter.setShowSql(true);
 
-//        final Properties properties = new Properties();
-//        properties.setProperty("hibernate.hbm2ddl.auto", "none");
-//        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
-////        properties.setProperty("datasource.schema", "schema.sql");
-
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean =
                 new LocalContainerEntityManagerFactoryBean();
         entityManagerFactoryBean.setDataSource(dataSource);
         entityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
-//        entityManagerFactoryBean.setJpaProperties(properties);
         entityManagerFactoryBean.setJpaDialect(new HibernateJpaDialect());
         entityManagerFactoryBean.setPackagesToScan("com.exchange.rate.exchrate.enteties");
         entityManagerFactoryBean.afterPropertiesSet();

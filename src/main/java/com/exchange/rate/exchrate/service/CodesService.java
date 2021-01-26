@@ -1,5 +1,6 @@
 package com.exchange.rate.exchrate.service;
 
+import com.exchange.rate.exchrate.enteties.Code;
 import com.exchange.rate.exchrate.repo.CodeRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,4 +14,10 @@ public class CodesService {
     public CodesService(CodeRepo codesRepository) {
         this.codesRepository = codesRepository;
     }
+
+    public String getCurrencyNameByCode(String code) {
+        Code name = codesRepository.findByCode(code).orElse(null);
+        return String.valueOf(name);
+    }
+
 }

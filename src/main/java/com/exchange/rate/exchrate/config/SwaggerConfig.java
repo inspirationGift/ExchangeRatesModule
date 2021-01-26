@@ -21,7 +21,6 @@ public class SwaggerConfig {
                 .paths(PathSelectors.any())
                 .apis(RequestHandlerSelectors.basePackage("com.exchange.rate.exchrate"))
                 .build();
-
     }
 
 //    @Override
