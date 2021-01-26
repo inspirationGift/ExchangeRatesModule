@@ -1,4 +1,4 @@
-package com.exchange.rate.exchrate.impl.privatBankAPI;
+package com.exchange.rate.exchrate.impl.Monobank;
 
 import com.exchange.rate.exchrate.dtos.DTOExchangeRate;
 import com.exchange.rate.exchrate.repo.CodeRepo;
@@ -9,7 +9,10 @@ import lombok.ToString;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.Transient;
+import java.net.HttpCookie;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 
 
 /*
@@ -50,9 +53,13 @@ public class MonoBankAPI implements DTOExchangeRate {
     private Double rateCross;
 
 
+    public LocalDate getDate() {
+        return Instant.ofEpochMilli(date).atZone(ZoneId.systemDefault()).toLocalDate();
+    }
+
     @Override
     public LocalDate getReportDate() {
-        return null;
+        return Instant.ofEpochMilli(date).atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
     @Override
