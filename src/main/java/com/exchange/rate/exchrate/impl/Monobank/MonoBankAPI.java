@@ -1,13 +1,15 @@
 package com.exchange.rate.exchrate.impl.Monobank;
 
 import com.exchange.rate.exchrate.dtos.DTOExchangeRate;
+import com.exchange.rate.exchrate.dtos.DataSource;
+import com.exchange.rate.exchrate.enteties.Code;
 import com.exchange.rate.exchrate.repo.CodeRepo;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 import java.net.HttpCookie;
 import java.time.Instant;
@@ -38,20 +40,17 @@ import java.time.ZoneId;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@Setter@Getter
 public class MonoBankAPI implements DTOExchangeRate {
-
-    @Transient
-    @Autowired
-    private CodeRepo codesRepository;
 
     private String currencyCodeA;
     private String currencyCodeB;
     //sec unix
-    private long date;
+    private Long date;
     private Double rateBuy;
     private Double rateSell;
     private Double rateCross;
-
+    private String code;
 
     public LocalDate getDate() {
         return Instant.ofEpochMilli(date).atZone(ZoneId.systemDefault()).toLocalDate();
@@ -64,12 +63,12 @@ public class MonoBankAPI implements DTOExchangeRate {
 
     @Override
     public String getBaseCurrency() {
-        return this.codesRepository.findByCode(this.currencyCodeB).getName();
+        return "UAH";
     }
 
     @Override
     public String getCurrency() {
-        return this.codesRepository.findByCode(this.currencyCodeA).getName();
+        return code;
     }
 
     @Override
@@ -86,6 +85,6 @@ public class MonoBankAPI implements DTOExchangeRate {
 
     @Override
     public int getReportSource() {
-        return 3;
+        return DataSource.MonoBank.getVal();
     }
 }

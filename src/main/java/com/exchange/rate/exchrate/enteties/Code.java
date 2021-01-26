@@ -5,11 +5,12 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "codes")
+@Table(name = "codes", schema = "schema_test")
 public class Code {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

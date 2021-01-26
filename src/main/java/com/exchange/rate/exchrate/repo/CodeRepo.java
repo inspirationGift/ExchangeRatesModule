@@ -4,11 +4,16 @@ import com.exchange.rate.exchrate.enteties.Code;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface CodeRepo extends JpaRepository<Code, Integer> {
 
-    Code findByCode(String code);
+    @Override
+    Optional<Code> findById(Integer integer);
 
-    Code findByName(String name);
+    Optional<Code> findByCode(String code);
+
+    Optional<Code> findByName(String name);
 
 }

@@ -3,14 +3,19 @@ package com.exchange.rate.exchrate.controllers;
 import com.exchange.rate.exchrate.dtos.DTOExchangeRate;
 import com.exchange.rate.exchrate.dtos.DataSource;
 import com.exchange.rate.exchrate.enteties.ExchangeRateModel;
+import com.exchange.rate.exchrate.impl.MinfinAPI.MinfinAPI;
+import com.exchange.rate.exchrate.impl.Monobank.MonoBankAPI;
 import com.exchange.rate.exchrate.impl.privatBankAPI.PbByDate;
+import com.exchange.rate.exchrate.service.CodesService;
 import com.exchange.rate.exchrate.service.ExchangeRateServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/data-loader", method = RequestMethod.GET)
@@ -18,6 +23,11 @@ public class DataLoadingController {
 
     private RestTemplate restTemplate;
     private final ExchangeRateServiceImpl service;
+    @Value("#{${api.urls}}")
+    private Map<String, String> urls;
+
+    @Autowired
+    private CodesService codeService;
 
     public DataLoadingController(ExchangeRateServiceImpl service) {
         this.restTemplate = new RestTemplate();
@@ -30,8 +40,7 @@ public class DataLoadingController {
         LocalDate getDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd.MM.yyyy"));
 
         PbByDate rates = restTemplate.getForObject(
-//                "https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5",
-                "https://api.privatbank.ua/p24api/exchange_rates?json&date=" + date,
+                urls.get("privatbank") + date,
                 PbByDate.class);
 
         assert rates != null;
@@ -47,6 +56,55 @@ public class DataLoadingController {
                         rate.getCurrency(), rate.getSaleRateNB(), rate.getPurchaseRateNB(),
                         DataSource.NationalBank.getVal()));
             }
+        }
+        return true;
+    }
+
+    @GetMapping("/monobank")
+    public Boolean monoBankDataLoader() {
+
+        MonoBankAPI[] rates = restTemplate.getForObject(
+                urls.get("monobank"),
+                MonoBankAPI[].class);
+
+        for (MonoBankAPI rate : rates) {
+
+            String currencyNameByCode = codeService.getCurrencyNameByCode(rate.getCurrencyCodeA());
+            if (currencyNameByCode == null) continue;
+            rate.setCode(currencyNameByCode);
+
+            ExchangeRateModel model = new ExchangeRateModel(
+                    0,
+                    rate.getReportDate(),
+                    rate.getBaseCurrency(),
+                    rate.getCurrency(),
+                    rate.getSale(),
+                    rate.getPurchase(),
+                    rate.getReportSource()
+            );
+            service.saveRate(model);
+        }
+        return true;
+    }
+
+    @GetMapping("/minfin")
+    public Boolean minfinDataLoader() {
+
+        MinfinAPI[] rates = restTemplate.getForObject(
+                urls.get("minfin"),
+                MinfinAPI[].class);
+
+        for (DTOExchangeRate rate : rates) {
+            ExchangeRateModel model = new ExchangeRateModel(
+                    0,
+                    rate.getReportDate(),
+                    rate.getBaseCurrency(),
+                    rate.getCurrency(),
+                    rate.getSale(),
+                    rate.getPurchase(),
+                    rate.getReportSource()
+            );
+            service.saveRate(model);
         }
         return true;
     }

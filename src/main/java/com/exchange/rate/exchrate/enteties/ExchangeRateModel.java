@@ -24,5 +24,4 @@ public class ExchangeRateModel {
     private double sale;
     private double purchase;
     private int reportSource;
-
 }

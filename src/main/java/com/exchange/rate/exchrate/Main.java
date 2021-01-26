@@ -9,19 +9,7 @@ import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
-//        RestTemplate restTemplate = new RestTemplate();
-//
-//        PbByDate arr = restTemplate.getForObject(
-////                "https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5",
-//                "https://api.privatbank.ua/p24api/exchange_rates?json&date=03.01.2021",
-//                PbByDate.class);
-//
-//
-//
-//
-//        System.out.println(Arrays.toString(new PbByDate[]{arr}));
-
-        LocalDate getDate = LocalDate.parse("03.01.2021", DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-        System.out.println(getDate.getMonth());
+        LocalDate getDate = LocalDate.parse("2021-01-26 10:00:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        System.out.println(getDate);
     }
 }
