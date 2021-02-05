@@ -2,19 +2,14 @@ package com.exchange.rate.exchrate.impl.Monobank;
 
 import com.exchange.rate.exchrate.dtos.DTOExchangeRate;
 import com.exchange.rate.exchrate.dtos.DataSource;
-import com.exchange.rate.exchrate.enteties.Code;
-import com.exchange.rate.exchrate.repo.CodeRepo;
-import lombok.*;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Transient;
-import java.net.HttpCookie;
-import java.time.Instant;
+import lombok.*;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
+
+import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.LocalDateTime;
 
 
 /*
@@ -43,22 +38,20 @@ import java.time.ZoneId;
 @Setter@Getter
 public class MonoBankAPI implements DTOExchangeRate {
 
-    private String currencyCodeA;
-    private String currencyCodeB;
-    //sec unix
-    private Long date;
+    private Integer currencyCodeA;
+    private Integer currencyCodeB;
+    private String date;
     private Double rateBuy;
     private Double rateSell;
     private Double rateCross;
     private String code;
-
-    public LocalDate getDate() {
-        return Instant.ofEpochMilli(date).atZone(ZoneId.systemDefault()).toLocalDate();
-    }
+    @Generated(GenerationTime.INSERT)
+    @Column(columnDefinition = "TIMESTAMP", insertable = false, updatable = false)
+    private LocalDateTime createDate;
 
     @Override
     public LocalDate getReportDate() {
-        return Instant.ofEpochMilli(date).atZone(ZoneId.systemDefault()).toLocalDate();
+        return createDate.toLocalDate();
     }
 
     @Override

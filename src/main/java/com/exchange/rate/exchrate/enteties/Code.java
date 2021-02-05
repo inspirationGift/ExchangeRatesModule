@@ -15,8 +15,7 @@ public class Code {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Size(max = 3)
-    private String code;
+    private Integer code;
     @Size(max = 3)
     private String name;
 

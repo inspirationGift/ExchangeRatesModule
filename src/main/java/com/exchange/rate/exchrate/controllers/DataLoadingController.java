@@ -8,8 +8,8 @@ import com.exchange.rate.exchrate.impl.Monobank.MonoBankAPI;
 import com.exchange.rate.exchrate.impl.privatBankAPI.PbByDate;
 import com.exchange.rate.exchrate.service.CodesService;
 import com.exchange.rate.exchrate.service.ExchangeRateServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -19,19 +19,21 @@ import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/data-loader", method = RequestMethod.GET)
+//@ConfigurationProperties(prefix = "api")
 public class DataLoadingController {
 
     private RestTemplate restTemplate;
     private final ExchangeRateServiceImpl service;
+
     @Value("#{${api.urls}}")
-    private Map<String, String> urls;
+    private  Map<String, String> urls;
 
-    @Autowired
-    private CodesService codeService;
+    private final CodesService codeService;
 
-    public DataLoadingController(ExchangeRateServiceImpl service) {
+    public DataLoadingController(ExchangeRateServiceImpl service,  CodesService codeService) {
         this.restTemplate = new RestTemplate();
         this.service = service;
+        this.codeService = codeService;
     }
 
     @GetMapping("/pb/{date}")

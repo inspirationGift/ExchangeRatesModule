@@ -15,7 +15,7 @@ public class CodesService {
         this.codesRepository = codesRepository;
     }
 
-    public String getCurrencyNameByCode(String code) {
+    public String getCurrencyNameByCode(Integer code) {
         Code name = codesRepository.findByCode(code).orElse(null);
         return String.valueOf(name);
     }

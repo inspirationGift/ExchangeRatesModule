@@ -1,11 +1,5 @@
-insert into schema_test.resourceCode (id,name)
-values
-(1, 'NB'),
-(2, 'PB'),
-(3, 'Monobank'),
-(4, 'Minfin');
 
-insert into schema_test.codes (name,code)
+insert into schema_test.codes (name, code)
 values
 ('AED', '784'),
 ('AFN', '971'),
@@ -174,6 +168,11 @@ values
 ('YER', '886'),
 ('ZAR', '710'),
 ('ZMW', '967'),
-('ZWL', '932')
-ON CONFLICT DO NOTHING;
+('ZWL', '932');
 
+insert into schema_test.resourceCode (id,name)
+values
+(1, 'NB'),
+(2, 'PB'),
+(3, 'Monobank'),
+(4, 'Minfin');
