@@ -19,7 +19,7 @@ create table if not exists schema_test.currencies_rate
 create table if not exists schema_test.codes
 (
     id   serial primary key,
-    code varchar(3),
+    code int,
     name varchar(3),
     unique (code, name)
 );

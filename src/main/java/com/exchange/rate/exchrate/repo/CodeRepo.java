@@ -12,7 +12,7 @@ public interface CodeRepo extends JpaRepository<Code, Integer> {
     @Override
     Optional<Code> findById(Integer integer);
 
-    Optional<Code> findByCode(String code);
+    Optional<Code> findByCode(Integer code);
 
     Optional<Code> findByName(String name);
 
